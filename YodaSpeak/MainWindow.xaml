@@ -1,0 +1,31 @@
+﻿<Window x:Class="YodaSpeak.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:YodaSpeak"
+        xmlns:vm="clr-namespace:YodaSpeak.ViewModel"
+        mc:Ignorable="d" 
+        Title="Yoda Speak" Height="400" Width="600">
+    <Window.DataContext>
+        <vm:YodoViewModel></vm:YodoViewModel>
+    </Window.DataContext>
+    <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" >
+                <TextBox x:Name="txtOriginalText" Height="23" TextWrapping="Wrap" Text="{Binding OriginalText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="220"/>
+                <Button x:Name="btnTranslate" 
+                        Margin="10 0 0 0" 
+                        Content="Translate"  
+                        Width="75"
+                        IsEnabled="{Binding TranslateCommand}"
+                        Command="{Binding Path=TranslateTextCommand}">
+                </Button>
+            </StackPanel>
+            <Label  x:Name="lblName"/>
+            <Label x:Name="txtResult"  Margin="0 10" Width="300" >
+                <TextBlock TextWrapping="Wrap" Text="{Binding TransalatedText}"/>
+            </Label>
+        </StackPanel>
+    </Grid>
+</Window>
