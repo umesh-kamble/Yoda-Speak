@@ -45,16 +45,22 @@ namespace YodaSpeak.Database
         }
         public void addRecord(string orignal, string translate)
         {
-            if (!checkExistRecord(orignal))
+            SQLiteCommand command = new SQLiteCommand(mConn);
+            mConn.Open();
+            command.CommandText = $"select count(*) from YodaSpeak where OriginalText = '{orignal}'";
+            int count = Convert.ToInt32(command.ExecuteScalar());
+            if (count == 0)
             {
                 string myQuery = $"insert into YodaSpeak (OriginalText, TransalatedText) values('{orignal}','{translate}')";
-                using (SQLiteCommand command = new SQLiteCommand(myQuery, mConn))
-                {
-                    mConn.Open();
-                    command.ExecuteNonQuery();
-                    mConn.Close();
-                }
+                command.CommandText = myQuery;
+                command.ExecuteNonQuery();
             }
+            else
+            {
+                command.CommandText = $"UPDATE YodaSpeak SET TransalatedText='{translate}' WHERE OriginalText='{orignal}'";
+                command.ExecuteNonQuery();
+            }
+            mConn.Close();
         }
         public string getRecord(string orignal)
         {
@@ -70,19 +76,6 @@ namespace YodaSpeak.Database
                 mConn.Close();
             }
             return TransalatedText;
-        }
-        private bool checkExistRecord(string orignal)
-        {
-            bool checkRows;
-            string myQuery = $"select * from YodaSpeak where OriginalText='{orignal}'";
-            using (SQLiteCommand command = new SQLiteCommand(myQuery, mConn))
-            {
-                mConn.Open();
-                SQLiteDataReader dataReader = command.ExecuteReader();
-                checkRows = dataReader.HasRows;
-                mConn.Close();
-            }
-            return checkRows;
         }
 
     }
