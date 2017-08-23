@@ -67,16 +67,21 @@ namespace YodaSpeak.ViewModel
         private void TranslateSentence()
         {
             TransalatedText = string.Empty;
+            string transaletText = string.Empty;
             if (InternetConnection.IsConnectedToInternet())
             {
-                TransalatedText = YodoService.Instance.GetStringFromApi(OriginalText);
-                YodaSpeakDBHelper.Instance.addRecord(OriginalText, TransalatedText);
+                 transaletText = YodoService.Instance.GetStringFromApi(OriginalText);
+                if (!string.Equals(transaletText, "Error"))
+                {
+                    YodaSpeakDBHelper.Instance.addRecord(OriginalText, transaletText);
+                    TransalatedText = transaletText;
+                }
             }
             else
                 TransalatedText = YodaSpeakDBHelper.Instance.getRecord(OriginalText);
 
-            if (string.IsNullOrEmpty(TransalatedText))
-                    TransalatedText = "Record not found.";
+            if (string.IsNullOrEmpty(TransalatedText) || string.Equals(transaletText , "Error"))
+                    TransalatedText = "Somethig went wrong...";
             
             OriginalText = string.Empty;
         }

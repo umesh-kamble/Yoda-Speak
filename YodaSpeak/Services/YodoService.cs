@@ -33,12 +33,12 @@ namespace YodaSpeak.Services
                 {
                     return response.Body;
                 }
-                errorMsg = "Somethig went wrong. Please try again ...";
+                errorMsg = "Error";
                 return errorMsg;
             }
             catch (Exception ex)
             {
-                return errorMsg = "Somethig went wrong ...";
+                return errorMsg = "Error";
             }
         }
     }
